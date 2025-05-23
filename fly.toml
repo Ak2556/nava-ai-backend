@@ -1,0 +1,27 @@
+app = "nava-backend"   # your Fly app name
+
+[build]
+  builder = "paketobuildpacks/builder:base"
+
+[env]
+  SECRET_KEY = "0b124a1d032c4be89a7a6593d97a48e2e059e1c183f84256b72a4ad564ff9c20"
+  OPENROUTER_API_KEY = "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"
+
+[[services]]
+  # directly run your FastAPI entrypoint
+  command = "uvicorn main:app --host 0.0.0.0 --port 10000"
+  internal_port = 10000
+  protocol = "tcp"
+
+  [services.concurrency]
+    type = "connections"
+    soft_limit = 20
+    hard_limit = 25
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
